@@ -1,0 +1,60 @@
+SPAC2.LST    CYBERNETIC LANDSCAPES     PAGE  2
+
+        CALL DRAWTR(0,IY(N),0)
+        IF (IXX.EQ.0) GOTO130
+        CALL POS(IXX,0,IZZ)
+        CALL DRAWTR(0,IY(N),0)
+        GO TO 130
+ 120    CALL POS(-IX(N),0,IZ(N)-131071-IPZ(N))
+        CALL DRAWTR(0,IY(N),0)
+        IF (IXX.EQ.0) GOTO130
+        CALL POS(-IXX,0,IZZ-131071-IPZ(N))
+        CALL DRAWTR(0,IY(N),0)
+ 130    IX(N)=IX(N)*IXTRA
+        IZ(N)=IZ(N)*IXTRA
+        IXX=IXX+IXTRA
+        IZZ=IZZ+IXTRA
+        IF (IABS(IX(N)).LE.131071.AND.IABS(IZ(N)).LE.131071) GOTO110
+        NX=NX+1
+        IX(N)=IPX(N)+2*IXTRA*NX
+        IZ(N)=IPZ(N)
+        IXX=IZ(N)
+        IZZ=IX(N)
+        IF (IABS(IX(N)).LE.131071) GOTO110
+ 150    CONTINUE
+        CALL ENDITM
+                CALL DECITM('RIM',0)
+        CALL POS(-131071,0,-131071)
+        CALL DRAWT(-131071,0,131071)
+        CALL DRAWT(131071,0,131071)
+        CALL DRAWT(131071,0,-131071)
+        CALL DRAWT(-131071,0,-131071)
+        CALL ENDITM
+        CALL DECITM('MAN',0)
+        IDUM=UNIT/4
+        CALL POS(-UNIT/8,0,0)
+        CALL DRAWTR(0,UNIT/2,0)
+        CALL DRAWTR(IDUM,0,0)
+        CALL DRAWTR(0,-UNIT/2,0)
+        CALL POSR(-UNIT/8,UNIT/2,0)
+        CALL DRAWTR(0,UNIT/2,0)
+        CALL POSR(-3*UNIT/8,-IDUM,0)
+        CALL DRAWTR(3*IDUM,0,0)
+        CALL POSR(-IDUM,UNIT/4,0)
+        CALL DRAWTR(0,IDUM,0)
+        CALL DRAWTR(-IDUM,0,0)
+        CALL DRAWTR(0,-IDUM,0) 
+        CALL DRAWTR(IDUM,0,0)
+        CALL ENDITM
+                CALL DECINS('MMAN','MAN',0)
+        CALL MAKMAT(0,0,0,0,0,0,IARA7)
+        CALL MAT3(IARA7,'KEY10')
+        CALL MAKMAT(0,0,0,0,0,0,MMAN)
+        CALL MAT3(MMAN,'KEY11')
+        CALL MAKMAT(0,0,0,0,0,0,IARA6)
+        CALL MAT3I(IARA6,'KEY12','KEY10')
+        CALL ENDINS
+        CALL ADD('MMAN','PIC1')
+        CALL ADD('VERTS','PIC1')
+        CALL ADD('RIM','PIC1')
+        RRY=-UNIT

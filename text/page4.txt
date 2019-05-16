@@ -1,0 +1,60 @@
+SPAC2.LST    CYBERNETIC LANDSCAPES     PAGE  4
+
+                CALL DECITM('BAR1',0)
+        CALL POS(131071-75000-7000,131071-25000)
+        CALL DRAWTR(14000,0)
+        CALL ENDITM
+                CALL DECINS('MBAR1','BAR1',0)
+        CALL MAKMT2(0,0,0,1.0,IBAR1)
+        CALL MAT2(IBAR1,'KEY13')
+        CALL ENDINS
+        CALL ADD('MBAR1','PIC2')
+                CALL DECITM('BAR2',0)
+        CALL POS(-131071+75000-7000,131071-25000)
+        CALL DRAWTR(14000,0)
+        CALL ENDITM
+                CALL DECINS('MBAB2','BAR2',0)
+        CALL MAKMT2(0,0,0,1.0,IBAR2)
+        CALL MAT2(IBAR2,'KEY14')
+        CALL ENDINS
+        CALL ADD('MBAR2','PIC2')
+        CALL ADD('MDOT' ,'PIC2')
+        CALL ADD('MLINE','PIC2')
+        CALL ADD('BORDR','PIC2')
+        CALL DISPLAY('PIC2',0)
+        RZ=0.
+        RX=0.
+        RY=-UNIT
+        MZ=0
+        MX=0
+        MMOV=0
+        MROT=0
+        NDUM=1
+        RRAN=3.1415
+ 200    CALL DREAD
+        CALL ADJDAT
+        AY=DKNOB(1)*180.
+        AX=DKNOB(2)*180.
+C               AX IS FOR VIEW UP,DOWN.
+        RX=RX-XJOY*RUNIT/10.
+        IF(.NOT.SWITCH(17)) GOTO215
+        RY=RY+YJOY*RUNIT/10.
+        GO TO 217
+ 215    RZ=RZ+YJOY*RUNIT/10.
+ 217    CONTINUE
+        IRX=RX
+        IRI=RY
+        IRZ=RZ
+        RDUM=25000./131071.
+        RYDUM=ISIGN(1,IRY)*(((IABS(IRY)+131071)/131071)/2)
+        RXDUM=ISIGN(1,IRX)*(((IABS(IRX)+131071)/131071)/2)
+        RZDUM=ISIGN(1,IRZ)*(((IABS(IRZ)+131071)/131071)/2)
+        QX=RDUM*(RX-RXDUM*262142.)
+        QZ=RDUM*(RZ-RZDUM*262142.)
+        QY=RDUM*(RY-RYDUM*262142.)
+        CALL MAKMT2(0,0,25000.*SIN(AX),1.0,IBAR1)
+        CALL UPDATE('MAT2','KEY13',IBAR1)
+        CALL MAKMT2(0,0,-QY,1.0,IBAR2)
+        CALL UPDATE('MAT2','KEY14',IBAR2)
+        CALL MAKMT2(0,-QX,QZ,1.0,IDOT)
+        CALL UPDATE('MAT2','KEY5',IDOT)

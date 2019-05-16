@@ -1,0 +1,61 @@
+SPAC2.LST    CYBERNETIC LANDSCAPES     PAGE  1
+
+C               SPAC2.F4        CYBERNETIC LANDSCAPE 2: FIELDS
+        COMMON /DEVDAT/ DKNOB(4),XJOY,YJOY,XPEN3D,YPEN3D,ZPEN3D,
+        1DSWCH,DLITS,PENDN,PENED,PENDX,PENDY,PENUX,PENUY,PENX,PENY
+        DIMENSION IARRAY(4,4),IXMOV(4,4),IZMOV(4,4)
+        DIMENSION IWORD(14),ICX(26),ICY(26),ICIRCL(3,2)
+        DIMENSION IDOT(3,3),ILINE(3,3),IBAR1(3,3),IBAR2(3,3)
+        DIMENSION IARA6(4,4),MMAN(4,4),IPX(4),IPY(4),IPZ(4)
+        DIMENSION IRA7(4,4)
+        DIMENSION IX(4),IY(4),IZ(4),ILETR(53)
+        DATA ILETR/0,'A',0,'B',0,'C',0,'D',0,'E',0,'F',0,'G',
+     1  0,'H',0,'I',0,'J',0,'K',0,'L',0,'M',0,'N',0,'O',0,
+     2  'P',0,'Q',0,'R',0,'S',0,'T',0,'U',0,'V',0,'W',0,
+     3  'X',0,'Y',0,'Z',0/
+        INTEGER UNIT,X,Y,Z
+        EXTERNAL STORE
+         CALL ARINIT(STORE,10000,5)
+        CALL MODE('3D')
+        CALL MODE('MON')
+        UNIT=10000
+        RUNIT=UNIT
+        IXTRA=RUNIT/SQRT(2.)
+                CALL DECITM('VERTS',0)
+        IPX(1)=UNIT
+        IPZ(1)=-UNIT
+        IPX(2)=-UNIT
+        IPZ(2)=UNIT
+        IPX(3)=UNIT
+        IPZ(3)=UNIT
+        IPX(4)=-UNIT
+        IPZ(4)=-UNIT
+        IPX(5)=UNIT
+        IPY(1)=UNIT
+        IPY(2)=2*UNIT
+        IPY(3)=3*UNIT
+        IPY(4)=4*UNIT
+        DO 30 N=1,4
+        IX(N)=IPX(N)
+        IY(N)=IPY(N)
+        IZ(N)=IPZ(N)
+ 30     CONTINUE
+        DO 100 N=1,2
+ 40     IF (N.EQ.2) GOTO45
+        CALL POS(IX(N),0,IZ(N))
+        GO TO 50
+ 45     CALL POS(IZ(N),0,IX(N))
+ 50     CONTINUE
+        CALL DRAWTR(0,IY(N),0)
+        IX(N)=IX(N)*UNIT
+        IF (IABS(IX(N)).LE.131071) GOTO40
+        IX(N)=IPX(N)
+        IZ(N)=IZ(N)-2*UNIT
+        IF (IABS(IZ(N)).LE.131071) GOTO40
+ 100    CONTINUE
+        DO 150 N=3,4
+        NX=0
+        IXX=0
+        IZZ=0
+ 110    IF (N.EQ.4) GOTO120
+        CALL POS(IX(N),0,IZ(N))
