@@ -1,0 +1,278 @@
+C               SPAC2.F4        CYBERNETIC LANDSCAPE 2: FIELDS
+        COMMON /DEVDAT/ DKNOB(4),XJOY,YJOY,XPEN3D,YPEN3D,ZPEN3D,
+        1DSWCH,DLITS,PENDN,PENED,PENDX,PENDY,PENUX,PENUY,PENX,PENY
+        DIMENSION IARRAY(4,4),IXMOV(4,4),IZMOV(4,4)
+        DIMENSION IWORD(14),ICX(26),ICY(26),ICIRCL(3,2)
+        DIMENSION IDOT(3,3),ILINE(3,3),IBAR1(3,3),IBAR2(3,3)
+        DIMENSION IARA6(4,4),MMAN(4,4),IPX(4),IPY(4),IPZ(4)
+        DIMENSION IRA7(4,4)
+        DIMENSION IX(4),IY(4),IZ(4),ILETR(53)
+        DATA ILETR/0,'A',0,'B',0,'C',0,'D',0,'E',0,'F',0,'G',
+     1  0,'H',0,'I',0,'J',0,'K',0,'L',0,'M',0,'N',0,'O',0,
+     2  'P',0,'Q',0,'R',0,'S',0,'T',0,'U',0,'V',0,'W',0,
+     3  'X',0,'Y',0,'Z',0/
+        INTEGER UNIT,X,Y,Z
+        EXTERNAL STORE
+         CALL ARINIT(STORE,10000,5)
+        CALL MODE('3D')
+        CALL MODE('MON')
+        UNIT=10000
+        RUNIT=UNIT
+        IXTRA=RUNIT/SQRT(2.)
+                CALL DECITM('VERTS',0)
+        IPX(1)=UNIT
+        IPZ(1)=-UNIT
+        IPX(2)=-UNIT
+        IPZ(2)=UNIT
+        IPX(3)=UNIT
+        IPZ(3)=UNIT
+        IPX(4)=-UNIT
+        IPZ(4)=-UNIT
+        IPX(5)=UNIT
+        IPY(1)=UNIT
+        IPY(2)=2*UNIT
+        IPY(3)=3*UNIT
+        IPY(4)=4*UNIT
+        DO 30 N=1,4
+        IX(N)=IPX(N)
+        IY(N)=IPY(N)
+        IZ(N)=IPZ(N)
+ 30     CONTINUE
+        DO 100 N=1,2
+ 40     IF (N.EQ.2) GOTO45
+        CALL POS(IX(N),0,IZ(N))
+        GO TO 50
+ 45     CALL POS(IZ(N),0,IX(N))
+ 50     CONTINUE
+        CALL DRAWTR(0,IY(N),0)
+        IX(N)=IX(N)*UNIT
+        IF (IABS(IX(N)).LE.131071) GOTO40
+        IX(N)=IPX(N)
+        IZ(N)=IZ(N)-2*UNIT
+        IF (IABS(IZ(N)).LE.131071) GOTO40
+ 100    CONTINUE
+        DO 150 N=3,4
+        NX=0
+        IXX=0
+        IZZ=0
+ 110    IF (N.EQ.4) GOTO120
+        CALL POS(IX(N),0,IZ(N))
+        CALL DRAWTR(0,IY(N),0)
+        IF (IXX.EQ.0) GOTO130
+        CALL POS(IXX,0,IZZ)
+        CALL DRAWTR(0,IY(N),0)
+        GO TO 130
+ 120    CALL POS(-IX(N),0,IZ(N)-131071-IPZ(N))
+        CALL DRAWTR(0,IY(N),0)
+        IF (IXX.EQ.0) GOTO130
+        CALL POS(-IXX,0,IZZ-131071-IPZ(N))
+        CALL DRAWTR(0,IY(N),0)
+ 130    IX(N)=IX(N)*IXTRA
+        IZ(N)=IZ(N)*IXTRA
+        IXX=IXX+IXTRA
+        IZZ=IZZ+IXTRA
+        IF (IABS(IX(N)).LE.131071.AND.IABS(IZ(N)).LE.131071) GOTO110
+        NX=NX+1
+        IX(N)=IPX(N)+2*IXTRA*NX
+        IZ(N)=IPZ(N)
+        IXX=IZ(N)
+        IZZ=IX(N)
+        IF (IABS(IX(N)).LE.131071) GOTO110
+ 150    CONTINUE
+        CALL ENDITM
+                CALL DECITM('RIM',0)
+        CALL POS(-131071,0,-131071)
+        CALL DRAWT(-131071,0,131071)
+        CALL DRAWT(131071,0,131071)
+        CALL DRAWT(131071,0,-131071)
+        CALL DRAWT(-131071,0,-131071)
+        CALL ENDITM
+        CALL DECITM('MAN',0)
+        IDUM=UNIT/4
+        CALL POS(-UNIT/8,0,0)
+        CALL DRAWTR(0,UNIT/2,0)
+        CALL DRAWTR(IDUM,0,0)
+        CALL DRAWTR(0,-UNIT/2,0)
+        CALL POSR(-UNIT/8,UNIT/2,0)
+        CALL DRAWTR(0,UNIT/2,0)
+        CALL POSR(-3*UNIT/8,-IDUM,0)
+        CALL DRAWTR(3*IDUM,0,0)
+        CALL POSR(-IDUM,UNIT/4,0)
+        CALL DRAWTR(0,IDUM,0)
+        CALL DRAWTR(-IDUM,0,0)
+        CALL DRAWTR(0,-IDUM,0) 
+        CALL DRAWTR(IDUM,0,0)
+        CALL ENDITM
+                CALL DECINS('MMAN','MAN',0)
+        CALL MAKMAT(0,0,0,0,0,0,IARA7)
+        CALL MAT3(IARA7,'KEY10')
+        CALL MAKMAT(0,0,0,0,0,0,MMAN)
+        CALL MAT3(MMAN,'KEY11')
+        CALL MAKMAT(0,0,0,0,0,0,IARA6)
+        CALL MAT3I(IARA6,'KEY12','KEY10')
+        CALL ENDINS
+        CALL ADD('MMAN','PIC1')
+        CALL ADD('VERTS','PIC1')
+        CALL ADD('RIM','PIC1')
+        RRY=-UNIT
+        CALL DECINS('XZMOV','PIC1',0)
+        CALL MAKMAT(0,0,0,0,RRY,0,IARRAY)
+        CALL MAT3(IARRAY,'KEY1')
+        CALL MAKMAT(0,0,0,0,0,0,IZMOV)
+        CALL MAT3(IZMOV,'KEY2')
+        CALL VIEWPT(0,-512,2047,1535,0)
+        CALL ENDINS
+        CALL DISPLAY(0,'XZMOV')
+        RX=0.
+        CALL MODE('2D')
+        CALL DECITM('BORDR',0)
+        CALL POS(-131071,-131071)
+        CALL DRAWT(-131071,65535)
+        CALL DRAWT(131071,65535)
+        CALL DRAWT(131071,-131071)
+        CALL DRAWT(-131071,-131071)
+        CALL POS(-131071,131071)
+        CALL DRAWTR(0,-50000)
+        CALL DRAWTR(50000,0)
+        CALL DRAWTR(0,50000)
+        CALL DRAWTR(-50000,0)
+        CALL POSR(25000,0)
+        CALL DRAWTR(0,-50000)
+        DO 167 N=1,2
+        CALL POS(((-1)**(N+1))*131071-75000*((-1)**(N+1)),131071)
+        CALL DRAWTR(0,-50000)
+        CALL POSR(-7000,0)
+        CALL DRAWTR(14000,0)
+        CALL POSR(0,50000)
+        CALL DRAWTR(-14000,0)
+ 167    CONTINUE
+        RDUM=6.28318/25.
+        A=-RDUM
+        DO 170 N=1,26
+        A=A+RDUM
+        XDUM=25000.*COS(A)
+        ICX(N)=131071.-25000.+XDUM
+        YDUM=25000.*SIN(A)
+        ICY(N)=131071.-25000.+YDUM
+ 170    CONTINUE
+        CALL DTABLE('PO','AB',26,ICX,ICY)
+        CALL ENDITM
+        CALL DECITM('DOT',0)
+        CALL POS(-131071+25000-144,131071-25192)
+        CALL TEXT('X')
+        CALL ENDITM
+        CALL DECITM('LINE',0)
+        CALL POS(0,0)
+        CALL DRAWTR(0,25000)
+        CALL ENDITM
+        CALL DECINS('MDOT','DOT',0)
+        CALL MAKMT2(0,0,0,1.0,IDOT)
+        CALL MAT2(IDOT,'KEY5')
+        CALL ENDINS
+        CALL DECINS('MLINE','LIN',0)
+        CALL MAKMT2(0,0,0,1.0,ILINE)
+        CALL MAT2(ILINE,'KEY6')
+        CALL ENDINS 
+                CALL DECITM('BAR1',0)
+        CALL POS(131071-75000-7000,131071-25000)
+        CALL DRAWTR(14000,0)
+        CALL ENDITM
+                CALL DECINS('MBAR1','BAR1',0)
+        CALL MAKMT2(0,0,0,1.0,IBAR1)
+        CALL MAT2(IBAR1,'KEY13')
+        CALL ENDINS
+        CALL ADD('MBAR1','PIC2')
+                CALL DECITM('BAR2',0)
+        CALL POS(-131071+75000-7000,131071-25000)
+        CALL DRAWTR(14000,0)
+        CALL ENDITM
+                CALL DECINS('MBAB2','BAR2',0)
+        CALL MAKMT2(0,0,0,1.0,IBAR2)
+        CALL MAT2(IBAR2,'KEY14')
+        CALL ENDINS
+        CALL ADD('MBAR2','PIC2')
+        CALL ADD('MDOT' ,'PIC2')
+        CALL ADD('MLINE','PIC2')
+        CALL ADD('BORDR','PIC2')
+        CALL DISPLAY('PIC2',0)
+        RZ=0.
+        RX=0.
+        RY=-UNIT
+        MZ=0
+        MX=0
+        MMOV=0
+        MROT=0
+        NDUM=1
+        RRAN=3.1415
+ 200    CALL DREAD
+        CALL ADJDAT
+        AY=DKNOB(1)*180.
+        AX=DKNOB(2)*180.
+C               AX IS FOR VIEW UP,DOWN.
+        RX=RX-XJOY*RUNIT/10.
+        IF(.NOT.SWITCH(17)) GOTO215
+        RY=RY+YJOY*RUNIT/10.
+        GO TO 217
+ 215    RZ=RZ+YJOY*RUNIT/10.
+ 217    CONTINUE
+        IRX=RX
+        IRI=RY
+        IRZ=RZ
+        RDUM=25000./131071.
+        RYDUM=ISIGN(1,IRY)*(((IABS(IRY)+131071)/131071)/2)
+        RXDUM=ISIGN(1,IRX)*(((IABS(IRX)+131071)/131071)/2)
+        RZDUM=ISIGN(1,IRZ)*(((IABS(IRZ)+131071)/131071)/2)
+        QX=RDUM*(RX-RXDUM*262142.)
+        QZ=RDUM*(RZ-RZDUM*262142.)
+        QY=RDUM*(RY-RYDUM*262142.)
+        CALL MAKMT2(0,0,25000.*SIN(AX),1.0,IBAR1)
+        CALL UPDATE('MAT2','KEY13',IBAR1)
+        CALL MAKMT2(0,0,-QY,1.0,IBAR2)
+        CALL UPDATE('MAT2','KEY14',IBAR2)
+        CALL MAKMT2(0,-QX,QZ,1.0,IDOT)
+        CALL UPDATE('MAT2','KEY5',IDOT)
+        CALL MAKMT2(AY,131071.-25000.,131071.-25000.,1.0,ILINE)
+        CALL UPDATE('MAT2','KEY6',ILINE)
+        CALL MAKMAT(AX,AY,0,0,RY,0,IXMOV)
+        CALL UPDATE('MAT3','KEY1',IXMOV)
+        CALL MAKMAT(0,0,0,RX,RY,RZ,IZMOV)
+        CALL UPDATE('MAT3','KEY2',IZMOV) 
+        IF(MMOV.EQ.0.AND.MROT.NE.0) GO TO 270
+        IF(MMOV.NE.0.AND.MROT.EQ.0) GO TO 260
+        IF(NDUM.EQ.1) GOTO240
+        RRAN=RAN(RRAN)
+        MROT=RRAN*100.
+        R1=1.
+        IF(MROT.EQ.2*MROT/2) R1=-1.
+        AMY=RRAN*20.*R1
+        NDUM=1
+        GO TO 270
+ 240    RRAN=RAN(RRAN)
+        MMOV=RRAN*100.
+        R1=1.
+        IF(MMOV.EQ.2*MMOV/2) R1=-1.
+        MDUM=RRAN*RUNIT*R1/10.
+        RRAN=RAN(RRAN)
+        IDUM=RRAN*100.
+        R1=1.
+        IF(IDUM.EQ.2*IDUM/2) R1=-1.
+        IDUM=RRAN*RUNIT*R1/10.
+        NDUM=0
+ 260    MMOV=MMOV-1
+        RMDUM=MDUM
+        RIDUM=IDUM
+        RMZ=RMZ+RMDUM
+        RMX=RMX+RIDUM
+        CALL MAKMAT(0,0,0,RMX,0,RMZ,MMAN)
+        CALL UPDATE('MAT3','KEY11',MMAN)
+        GO TO 300 
+ 270    MROT=MROT-1
+        CALL MAKMAT(0,AMY,0,0,0,0,IARA6)
+        CALL UPDATE('MAT3','KEY12',IARA6)
+        IF(MROT.GT.0) GOTO300
+        CALL MAKMAT(0,0,0,0,0,0,IARA6)
+        CALL UPDATE('MAT3','KEY12',IARA6)
+ 300    CONTINUE
+        CALL SLEEP(5)
+        GO TO 200
+        END
