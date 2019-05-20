@@ -9,6 +9,7 @@ The programmer/artist is looking for someone who is interested in
 replicating the program for running on a modern mobile device.
 
 The SPAC2.F4 source code has been verified to compile with the DEC
-FORTRAN 40 compiler.
+FORTRAN 40 compiler.  To interace with the LDS-1 the program needs a
+library which is missing but could presumably be reconstructed.
 
 ![](https://raw.githubusercontent.com/aaron-marcus/cybernetic-landscapes/master/img/pic.jpg)
