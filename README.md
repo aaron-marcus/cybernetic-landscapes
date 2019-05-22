@@ -6,7 +6,8 @@ Fortran program for displaying a virtual reality environment on an
 [LDS-1](https://en.wikipedia.org/wiki/LDS-1_%28Line_Drawing_System-1%29).
 
 The programmer/artist is looking for someone who is interested in
-replicating the program for running on a modern mobile device.
+replicating the program for running on a modern mobile device.  For
+more information email lars@nocrew.org.
 
 The SPAC2.F4 source code has been verified to compile with the DEC
 FORTRAN 40 compiler.  To interace with the LDS-1 the program needs a
